@@ -6,7 +6,7 @@ import {
   // getItemById,
   // updateItem,
   // deleteItem,
-} from '../controllers/locationController';
+} from '../controllers/location.controller';
 
 const router = Router();
 
