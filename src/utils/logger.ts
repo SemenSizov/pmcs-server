@@ -104,3 +104,5 @@ export class Logging {
     });
   }
 }
+
+export const logger = Logging.getInstance()
