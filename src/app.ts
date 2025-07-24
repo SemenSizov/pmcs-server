@@ -1,6 +1,7 @@
 import express from 'express';
-import locationRoutes from './routes/locationRoutes';
-import authRoutes from './controllers/authController'
+import locationRoutes from './routes/location.routes';
+import authRoutes from './routes/auth.routes'
+import userRoutes from './routes/users.routes'
 import { errorHandler } from './middlewares/errorHandler';
 import cors from 'cors';
 import verifyToken from './middlewares/verifyToken';
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes)
 app.use(verifyToken)
 app.use('/api/locations', locationRoutes);
+app.use('/api/users', userRoutes)
 
 // Global error handler (should be after routes)
 app.use(errorHandler);
