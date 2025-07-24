@@ -2,5 +2,7 @@ export type User = {
     id: number,
     name: string,
     email: string,
-    role: "admin" | "user"
+    role: Role
 }
+
+export type Role = "admin" | 'user'
