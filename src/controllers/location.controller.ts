@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { Location, LocationDTO } from '../models/location';
-import { selectAllLocations, storeLocation, eraseLocation } from '../db/locationDb';
+import { selectAllLocations, insertLocation, deleteLocation as deleteLoc } from '../db/locationDb';
 
 // Create an item
 export const createLocation = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name } = req.body;
-    const result = await storeLocation(name)
+    const result = await insertLocation(name)
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -59,7 +59,7 @@ export const getLocations = async (req: Request, res: Response, next: NextFuncti
 export const deleteLocation = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
-    await eraseLocation(id)
+    await deleteLoc(id)
     res.status(204).send()
   } catch (error) {
     next(error);
