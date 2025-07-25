@@ -1,24 +1,19 @@
 import { UnitType } from "./unitType";
 
-export interface Procedure {
+export interface Procedure{
     id: number;
     name: string;
-    unitTypeId: string;
-    type: ProcedureType;
-    hoursInterval: number;
-    periodInterval: number;
+    type: 'period' | 'hours',
+    hours?: number
+    period?: 'weekly' | 'monthly' | 'quarterly' | 'semiannual' | 'annual';
+    unit_type_id: number;
 }
 
 export interface ProcedureDTO {
     id: number;
     name: string;
+    type: 'period' | 'hours',
+    hours?: number
+    period?: 'weekly' | 'monthly' | 'quarterly' | 'semiannual' | 'annual';
     unitType: UnitType;
-    type: ProcedureType;
-    hoursInterval: number;
-    periodINterval: number;
-}
-
-export enum ProcedureType {
-    ByTime = 1,
-    ByHours = 2,
 }
