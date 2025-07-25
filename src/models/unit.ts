@@ -1,15 +1,16 @@
 import { UnitType } from './unitType';
+import {Location} from './location'
 
 export interface Unit {
   id: number;
   unitTypeId: number;
   locationId: number;
-  serialNumber: string;
+  serial: string;
 }
 
 export interface UnitDTO {
   id: number;
   unitType: UnitType;
   location: Location;
-  serialNumber: string;
+  serial: string;
 }

@@ -1,60 +1,57 @@
 import { Request, Response, NextFunction } from 'express';
 import {
-    getLocations as get_locations,
-    updateLocation as update_location,
-    addLocation as add_location,
-    deleteLocation as delete_location,
-} from '../services/locations.service';
-// Create an item
-export const addLocation = async (
+    getUnits as get_units,
+    addUnit as add_unit,
+    deleteUnit as delete_unit,
+    updateUnit as update_unit,
+} from '../services/equipment-units.service';
+
+export const getUnits = async (
     req: Request,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        await add_location(req.body);
+        const users = await get_units();
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addUnit = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        await add_unit(req.body);
         res.status(201).send();
     } catch (error) {
         next(error);
     }
 };
 
-// Read all items
-export const getLocations = async (
+export const updateUnit = async (
     req: Request,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        const locations = await get_locations();
-        res.status(200).json(locations);
-    } catch (error) {
-        next(error);
-    }
-};
-
-export const updateLocation = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => {
-    try {
-        await update_location(req.body);
+        await update_unit(req.body);
         res.status(200).send();
     } catch (error) {
         next(error);
     }
 };
 
-
-export const deleteLocation = async (
+export const deleteUnit = async (
     req: Request,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        const id = parseInt(req.params.id, 10);
-        await delete_location(id);
+        await delete_unit(req.params.id);
         res.status(204).send();
     } catch (error) {
         next(error);

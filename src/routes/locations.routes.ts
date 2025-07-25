@@ -1,19 +1,16 @@
 import { Router } from 'express';
 import {
-  createLocation,
+  addLocation,
   getLocations,
-  deleteLocation
-  // getItemById,
-  // updateItem,
-  // deleteItem,
+  deleteLocation,
+  updateLocation,
 } from '../controllers/location.controller';
 
 const router = Router();
 
 router.get('/', getLocations);
-// router.get('/:id', getItemById);
-router.post('/', createLocation);
-// router.put('/:id', updateItem);
+router.post('/', addLocation);
+router.put('/:id', updateLocation);
 router.delete('/:id', deleteLocation);
 
 export default router;

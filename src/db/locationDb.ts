@@ -1,7 +1,12 @@
 import { pool } from './pool';
-import { Location, LocationDTO } from '../models/location';
+import { Location } from '../models/location';
 import { logger } from '../utils/logger';
+import { RowDataPacket } from 'mysql2';
 
+interface LocationRDP extends RowDataPacket {
+    id: number;
+    name: string;
+}
 
 export const insertLocation = async (name: string) => {
     try {
@@ -22,10 +27,20 @@ export const deleteLocation = async (locationId: number) => {
 
 export const selectAllLocations = async () => {
     try {
-        const [rows, fields] = await pool.query('SELECT * FROM location');
-        return rows as Location[];
+        const [rows] = await pool.execute<LocationRDP[]>('SELECT * FROM location');
+        return rows;
     } catch (e) {
         logger.logError(`Failed to get all locations ${e}`);
         throw e;
     }
 };
+
+export const updateLocation = async (location: Location) =>{
+    const {id, name} = location
+    try {
+        await pool.execute('UPDATE location SET name=(?) where id=(?)', [name, id])
+    } catch (e) {
+        logger.logError(`Failed to update location, id=${id}. ${e}`)
+        throw e
+    }
+}

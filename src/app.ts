@@ -1,8 +1,9 @@
 import express from 'express';
-import locationRoutes from './routes/location.routes';
+import locationRoutes from './routes/locations.routes';
 import authRoutes from './routes/auth.routes'
 import userRoutes from './routes/users.routes'
 import equipmentTypeRoutes from './routes/equipment-types.routes'
+import equipmentUnitRoutes from './routes/equipment-units.routes'
 import { errorHandler } from './middlewares/errorHandler';
 import cors from 'cors';
 import verifyToken from './middlewares/verifyToken';
@@ -21,6 +22,7 @@ app.use(verifyToken)
 app.use('/api/locations', locationRoutes);
 app.use('/api/users', userRoutes)
 app.use('/api/equipment-types', equipmentTypeRoutes)
+app.use('/api/equipment-units', equipmentUnitRoutes)
 
 // Global error handler (should be after routes)
 app.use(errorHandler);
