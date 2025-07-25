@@ -27,7 +27,9 @@ export const deleteLocation = async (locationId: number) => {
 
 export const selectAllLocations = async () => {
     try {
-        const [rows] = await pool.execute<LocationRDP[]>('SELECT * FROM location');
+        const [rows] = await pool.execute<LocationRDP[]>(
+            'SELECT * FROM location',
+        );
         return rows;
     } catch (e) {
         logger.logError(`Failed to get all locations ${e}`);
@@ -35,12 +37,15 @@ export const selectAllLocations = async () => {
     }
 };
 
-export const updateLocation = async (location: Location) =>{
-    const {id, name} = location
+export const updateLocation = async (location: Location) => {
+    const { id, name } = location;
     try {
-        await pool.execute('UPDATE location SET name=(?) where id=(?)', [name, id])
+        await pool.execute('UPDATE location SET name=(?) where id=(?)', [
+            name,
+            id,
+        ]);
     } catch (e) {
-        logger.logError(`Failed to update location, id=${id}. ${e}`)
-        throw e
+        logger.logError(`Failed to update location, id=${id}. ${e}`);
+        throw e;
     }
-}
+};

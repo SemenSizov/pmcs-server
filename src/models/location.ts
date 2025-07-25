@@ -1,4 +1,4 @@
-import { Unit, UnitDTO } from "./unit";
+import { Unit, UnitDTO } from './unit';
 
 export interface Location {
     id: number;
@@ -8,5 +8,5 @@ export interface Location {
 export interface LocationDTO {
     id: number;
     name: string;
-    units: UnitDTO[]
+    units: UnitDTO[];
 }

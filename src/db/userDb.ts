@@ -40,9 +40,7 @@ export const selectUserById = async (id: number): Promise<User | undefined> => {
 
 export const selectAllUsers = async (): Promise<User[] | undefined> => {
     try {
-        const [users] = await pool.execute<UserRDP[]>(
-            'select * FROM user',
-        );
+        const [users] = await pool.execute<UserRDP[]>('select * FROM user');
         return users;
     } catch (e) {
         logger.logError(`Failed to select all users. ${e}`);

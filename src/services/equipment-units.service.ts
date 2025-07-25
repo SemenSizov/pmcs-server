@@ -12,8 +12,6 @@ export const getUnits = async (): Promise<UnitDTO[]> => {
     const types = await selectAllTypes();
     const locations = await selectAllLocations();
     const units = await selectAllUnits();
-    console.log(locations)
-    console.log(types)
     if (!units) {
         return [];
     } else {

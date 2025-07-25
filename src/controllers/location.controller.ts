@@ -46,7 +46,6 @@ export const updateLocation = async (
     }
 };
 
-
 export const deleteLocation = async (
     req: Request,
     res: Response,

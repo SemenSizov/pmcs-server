@@ -2,16 +2,16 @@ import {
     selectAllLocations,
     insertLocation,
     deleteLocation as delete_location,
-    updateLocation as update_location
+    updateLocation as update_location,
 } from '../db/locationDb';
 import type { LocationDTO } from '../models/location';
 import { getUnits } from './equipment-units.service';
 
 export const getLocations = async (): Promise<LocationDTO[]> => {
     const locations = await selectAllLocations();
-    const units = await getUnits()
+    const units = await getUnits();
     const locationsDTO = locations.map((l) => {
-        return { ...l, units: units.filter(u=> u.location.id===l.id) };
+        return { ...l, units: units.filter((u) => u.location.id === l.id) };
     });
     if (!locations) {
         return [];
