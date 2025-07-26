@@ -1,4 +1,4 @@
-export interface UnitType {
+export interface EquipmentType {
     id: number;
     name: string
 }

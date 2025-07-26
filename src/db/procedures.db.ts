@@ -1,4 +1,4 @@
-import { pool } from './pool';
+import { pool } from './pool.db';
 import { logger } from '../utils/logger';
 import { RowDataPacket } from 'mysql2';
 import { Procedure } from '../models/procedure';
@@ -9,12 +9,12 @@ interface ProcedureRDP extends RowDataPacket {
     type: 'period' | 'hours',
     hours?: number
     period?: 'weekly' | 'monthly' | 'quarterly' | 'semiannual' | 'annual';
-    unit_type_id: number;
+    equipment_type_id: number;
 }
 
 export const selectAllProcedures = async (): Promise<ProcedureRDP[] | undefined> => {
     try {
-        const [procedures] = await pool.execute<ProcedureRDP[]>('select * FROM proc');
+        const [procedures] = await pool.execute<ProcedureRDP[]>('SELECT * FROM procedures');
         return procedures;
     } catch (e) {
         logger.logError(`Failed to select all procedures. ${e}`);
@@ -22,12 +22,11 @@ export const selectAllProcedures = async (): Promise<ProcedureRDP[] | undefined>
 };
 
 export const insertProcedure = async (procedure: Procedure) => {
-    const { name, type, hours, period, unit_type_id } = procedure;
-    console.log(procedure)
+    const { name, type, hours, period, equipment_type_id } = procedure;
     try {
         await pool.execute(
-            `insert into proc (name, type, hours, period, unit_type_id) values (?, ?, ?, ?, ?)`,
-            [name, type, hours, period, unit_type_id],
+            `INSERT INTO procedures (name, type, hours, period, equipment_type_id) VALUES (?, ?, ?, ?, ?)`,
+            [name, type, hours, period, equipment_type_id],
         );
     } catch (e) {
         logger.logError(`Failed to insert procedure. ${e}`);
@@ -36,18 +35,18 @@ export const insertProcedure = async (procedure: Procedure) => {
 
 export const deleteProcedure = async (id: string) => {
     try {
-        await pool.execute('delete from proc where id = ?', [id]);
+        await pool.execute('DELETE from PROCEDURES where id = ?', [id]);
     } catch (e) {
         logger.logError(`Failed to delete procedure. id = ${id}. ${e}`);
     }
 };
 
 export const updateProcedure = async (procedure: Procedure) => {
-    const {id, name, type, hours, period, unit_type_id } = procedure;
+    const {id, name, type, hours, period, equipment_type_id } = procedure;
     try {
         await pool.execute(
-            'UPDATE proc SET name = ?, type=?, hours=?, period=?, unit_type_id=? WHERE id = ?',
-            [name, type, hours, period, unit_type_id, id],
+            'UPDATE procedures SET name = ?, type=?, hours=?, period=?, equipment_type_id=? WHERE id = ?',
+            [name, type, hours, period, equipment_type_id, id],
         );
     } catch (e) {
         logger.logError(`Failed to update procedure. ${e}`);

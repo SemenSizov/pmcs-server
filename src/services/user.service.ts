@@ -1,4 +1,4 @@
-import { insertUser, selectAllUsers, deleteUser as delete_user, updateUser as update_user } from "../db/userDb"
+import { insertUser, selectAllUsers, deleteUser as delete_user, updateUser as update_user } from "../db/users.db"
 import type { User } from "../models/user"
 
 export const getUsers =async (): Promise<User[]> => {

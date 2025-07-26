@@ -3,7 +3,7 @@ import {
     insertLocation,
     deleteLocation as delete_location,
     updateLocation as update_location,
-} from '../db/locationDb';
+} from '../db/locations.db';
 import type { LocationDTO } from '../models/location';
 import { getUnits } from './equipment-units.service';
 

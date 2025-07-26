@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { OAuth2Client } from 'google-auth-library';
 import { getJWT } from '../utils/jwt';
-import { selectUserByEmail } from '../db/userDb';
+import { selectUserByEmail } from '../db/users.db';
 
 export const getAuthResponse = async (
     code: any,

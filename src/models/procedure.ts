@@ -1,4 +1,4 @@
-import { UnitType } from "./unitType";
+import { EquipmentType } from "./equipmentType";
 
 export interface Procedure{
     id: number;
@@ -6,7 +6,7 @@ export interface Procedure{
     type: 'period' | 'hours',
     hours?: number
     period?: 'weekly' | 'monthly' | 'quarterly' | 'semiannual' | 'annual';
-    unit_type_id: number;
+    equipment_type_id: number;
 }
 
 export interface ProcedureDTO {
@@ -15,5 +15,5 @@ export interface ProcedureDTO {
     type: 'period' | 'hours',
     hours?: number
     period?: 'weekly' | 'monthly' | 'quarterly' | 'semiannual' | 'annual';
-    unitType: UnitType;
+    equipmentType: EquipmentType;
 }

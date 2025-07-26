@@ -1,5 +1,5 @@
 import { Procedure } from "./procedure";
-import { UnitDTO } from "./unit";
+import { EquipmentUnitDTO } from "./equipmentUnit";
 
 export interface LogEntry {
     id: number;
@@ -14,5 +14,5 @@ export interface LodEntryDTO {
     date: Date;
     hours: number | null;
     procedure: Procedure;
-    unit: UnitDTO
+    unit: EquipmentUnitDTO
 }

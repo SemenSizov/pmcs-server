@@ -1,10 +1,10 @@
-import { selectAllTypes } from '../db/equipmentTypeDb';
+import { selectAllTypes } from '../db/equipment-types.db';
 import {
     insertProcedure,
     selectAllProcedures,
     deleteProcedure as delete_uprocedure,
     updateProcedure as update_procedure,
-} from '../db/procedureDb';
+} from '../db/procedures.db';
 import { Procedure, ProcedureDTO } from '../models/procedure';
 
 export const getProcedures = async (): Promise<ProcedureDTO[]> => {
@@ -14,14 +14,14 @@ export const getProcedures = async (): Promise<ProcedureDTO[]> => {
         return [];
     } else {
         const procedureDTOs = procedures.map((p) => {
-            const type = types?.find((t) => t.id === +p.unit_type_id)!;
+            const type = types?.find((t) => t.id === +p.equipment_type_id)!;
             const procedureDTO: ProcedureDTO = {
                 id: p.id,
                 name: p.name,
                 type: p.type,
                 period: p.period,
                 hours: p.hours,
-                unitType: {
+                equipmentType: {
                     id: type.id,
                     name: type.name,
                 },
