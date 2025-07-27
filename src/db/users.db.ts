@@ -1,79 +1,47 @@
-import { pool } from './pool.db';
-import type { Role, User } from '../models/user';
-import { logger } from '../utils/logger';
-import { RowDataPacket } from 'mysql2';
+import { mapUserDBtoUser, mapUserToDbFormat , type User, type UserDB } from '../types/user';
+import { queryOrThrow } from '../utils/db';
 
-interface UserRDP extends RowDataPacket {
-    id: number;
-    name: string;
-    email: string;
-    role: Role;
-}
-
-export const selectUserByEmail = async (
-    email: string,
-): Promise<User | undefined> => {
-    try {
-        const [rows] = await pool.execute<UserRDP[]>(
-            'SELECT * FROM users WHERE email = ?',
-            [email],
-        );
-        const user = rows[0];
-        return user;
-    } catch (e) {
-        logger.logError(`Failed to find user by email , email=${email}. ${e}`);
-    }
+export const selectUserByEmail = async (email: string): Promise<User | undefined> => {
+  const query = 'SELECT * FROM users WHERE email = ?';
+  const rows = await queryOrThrow<UserDB[]>(query, [email]);
+  return rows[0] ? mapUserDBtoUser(rows[0]) : undefined;
 };
 
 export const selectUserById = async (id: number): Promise<User | undefined> => {
-    try {
-        const [rows] = await pool.execute<UserRDP[]>(
-            'SELECT * FROM users WHERE id = ?',
-            [id],
-        );
-        const user = rows[0];
-        return user;
-    } catch (e) {
-        logger.logError(`Failed to find user by email , id=${id}. ${e}`);
-    }
+  const query = 'SELECT * FROM users WHERE id = ?';
+  const rows = await queryOrThrow<UserDB[]>(query, [id]);
+  return rows[0] ? mapUserDBtoUser(rows[0]) : undefined;
 };
 
-export const selectAllUsers = async (): Promise<User[] | undefined> => {
-    try {
-        const [users] = await pool.execute<UserRDP[]>('SELECT * FROM users');
-        return users;
-    } catch (e) {
-        logger.logError(`Failed to select all users. ${e}`);
-    }
+export const selectAllUsers = async (): Promise<User[]> => {
+  const query = 'SELECT * FROM users WHERE is_active = TRUE';
+  const rows = await queryOrThrow<UserDB[]>(query);
+  return rows.map(mapUserDBtoUser);
 };
 
-export const insertUser = async (name: string, email: string, role: Role) => {
-    try {
-        await pool.execute(
-            'INSERT INTO users (name, email, role) VALUES (?,?,?)',
-            [name, email, role],
-        );
-    } catch (e) {
-        logger.logError(`Failed to insert user. ${e}`);
-    }
+export const insertUser = async (user: User) => {
+  const {name, email, role, isActive} = user
+  const query = 'INSERT INTO users (name, email, role, is_active) VALUES (?, ?, ?, ?)';
+  await queryOrThrow(query, [name, email, role, isActive]);
 };
 
-export const deleteUser = async (id: string) => {
-    try {
-        await pool.execute('DELETE FROM users WHERE id = ?', [id]);
-    } catch (e) {
-        logger.logError(`Failed to delete user.  id = ${id}. ${e}`);
-    }
+export const deleteUser = async (id: number) => {
+  const query = 'DELETE FROM users WHERE id = ?';
+  await queryOrThrow(query, [id]);
 };
 
 export const updateUser = async (user: User) => {
-    const { id, name, email, role } = user;
-    try {
-        await pool.execute(
-            'UPDATE users SET name = ?, role= ?, email = ? WHERE id = ?',
-            [name, role, email, id],
-        );
-    } catch (e) {
-        logger.logError(`Failed to insert user. ${e}`);
-    }
+  const { id, name, email, role, is_active } = mapUserToDbFormat (user);
+  const query = 'UPDATE users SET name = ?, role = ?, email = ?, is_active = ? WHERE id = ?';
+  await queryOrThrow(query, [name, role, email, is_active, id]);
+};
+
+export const deactivateUser = async (id: number) => {
+  const query = 'UPDATE users SET is_active = FALSE WHERE id = ?';
+  await queryOrThrow(query, [id]);
+};
+
+export const activateUser = async (id: number) => {
+  const query = 'UPDATE users SET is_active = TRUE WHERE id = ?';
+  await queryOrThrow(query, [id]);
 };

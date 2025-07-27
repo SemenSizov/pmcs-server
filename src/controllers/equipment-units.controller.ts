@@ -5,6 +5,7 @@ import {
     deleteUnit as delete_unit,
     updateUnit as update_unit,
 } from '../services/equipment-units.service';
+import { AuthRequest } from '../middlewares/auth';
 
 export const getUnits = async (
     req: Request,
@@ -20,12 +21,12 @@ export const getUnits = async (
 };
 
 export const addUnit = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        await add_unit(req.body);
+        await add_unit(req.body, req.user?.id!);
         res.status(201).send();
     } catch (error) {
         next(error);
@@ -33,12 +34,12 @@ export const addUnit = async (
 };
 
 export const updateUnit = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        await update_unit(req.body);
+        await update_unit(req.body, req.user?.id!);
         res.status(200).send();
     } catch (error) {
         next(error);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { OAuth2Client } from 'google-auth-library';
 import { getJWT } from '../utils/jwt';
-import { selectUserByEmail } from '../db/users.db';
+import { getUserByEmail } from './users.service';
 
 export const getAuthResponse = async (
     code: any,
@@ -34,13 +34,11 @@ export const getAuthResponse = async (
 
     const payload = ticket.getPayload();
     const { email } = payload!;
-
     if (!email) {
         return { responseBody: { error: 'User not found' }, status: 401 };
     }
 
-    const user = await selectUserByEmail(email);
-
+    const user = await getUserByEmail(email);
     if (!user) {
         return { responseBody: { error: 'User not found' }, status: 401 };
     }

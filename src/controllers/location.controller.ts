@@ -5,14 +5,15 @@ import {
     addLocation as add_location,
     deleteLocation as delete_location,
 } from '../services/locations.service';
+import { AuthRequest } from '../middlewares/auth';
 // Create an item
 export const addLocation = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        await add_location(req.body);
+        await add_location(req.body, req.user?.id!);
         res.status(201).send();
     } catch (error) {
         next(error);
@@ -34,12 +35,12 @@ export const getLocations = async (
 };
 
 export const updateLocation = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        await update_location(req.body);
+        await update_location(req.body, req.user?.id!);
         res.status(200).send();
     } catch (error) {
         next(error);

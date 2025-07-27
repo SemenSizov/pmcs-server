@@ -4,7 +4,6 @@ import { logger } from '../utils/logger';
 
 export const googleAuth = async (req: Request, res: Response) => {
     const { code } = req.body;
-
     if (!code) {
         return res.status(400).json({ error: 'Missing auth code' });
     }

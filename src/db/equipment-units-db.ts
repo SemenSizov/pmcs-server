@@ -1,7 +1,7 @@
 import { pool } from './pool.db';
 import { logger } from '../utils/logger';
 import { RowDataPacket } from 'mysql2';
-import { EquipmentUnit } from '../models/equipmentUnit';
+import { EquipmentUnit } from '../types/equipmentUnit';
 
 interface EquipmentUnitRDP extends RowDataPacket {
     id: number;
@@ -20,12 +20,12 @@ export const selectAllUnits = async (): Promise<EquipmentUnitRDP[] | undefined> 
     }
 };
 
-export const insertUnit = async (equipnemtUnit: EquipmentUnit) => {
+export const insertUnit = async (equipnemtUnit: EquipmentUnit, changedBy: number) => {
     const { serial, locationId, equipmentTypeId } = equipnemtUnit;
     try {
         await pool.execute(
-            'INSERT INTO equipment_units (serial, equipment_type_id, location_id) VALUES (?, ?, ?)',
-            [serial, equipmentTypeId, locationId],
+            'INSERT INTO equipment_units (serial, equipment_type_id, location_id, changed_by) VALUES (?, ?, ?, ?)',
+            [serial, equipmentTypeId, locationId, changedBy],
         );
     } catch (e) {
         logger.logError(`Failed to insert equipment unit. ${e}`);
@@ -40,12 +40,12 @@ export const deleteUnit = async (id: string) => {
     }
 };
 
-export const updateUnit = async (unit: EquipmentUnit) => {
+export const updateUnit = async (unit: EquipmentUnit, changedBy: number) => {
     const { id, serial, locationId, equipmentTypeId } = unit;
     try {
         await pool.execute<EquipmentUnitRDP[]>(
-            'UPDATE equipment_units SET serial = ?, location_id=?, equipment_type_id=? WHERE id = ?',
-            [serial, locationId, equipmentTypeId, id],
+            'UPDATE equipment_units SET serial = ?, location_id=?, equipment_type_id=?, changed_by=? WHERE id = ?',
+            [serial, locationId, equipmentTypeId, changedBy, id],
         );
     } catch (e) {
         logger.logError(`Failed to update equipment unit. ${e}`);

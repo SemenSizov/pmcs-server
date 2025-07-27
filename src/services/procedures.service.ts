@@ -5,7 +5,7 @@ import {
     deleteProcedure as delete_uprocedure,
     updateProcedure as update_procedure,
 } from '../db/procedures.db';
-import { Procedure, ProcedureDTO } from '../models/procedure';
+import { Procedure, ProcedureDTO } from '../types/procedure';
 
 export const getProcedures = async (): Promise<ProcedureDTO[]> => {
     const types = await selectAllTypes();
@@ -32,14 +32,14 @@ export const getProcedures = async (): Promise<ProcedureDTO[]> => {
     }
 };
 
-export const addProcedure = async (procedure: Procedure) => {
-    return insertProcedure(procedure);
+export const addProcedure = async (procedure: Procedure, changedBy:number) => {
+    return insertProcedure(procedure, changedBy);
 };
 
 export const deleteProcedure = async (id: string) => {
     return delete_uprocedure(id);
 };
 
-export const updateProcedure = async (procedure: Procedure) => {
-    return update_procedure(procedure);
+export const updateProcedure = async (procedure: Procedure, changedBy:number) => {
+    return update_procedure(procedure,changedBy);
 };

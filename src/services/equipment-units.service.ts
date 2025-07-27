@@ -6,7 +6,7 @@ import {
     updateUnit as update_unit,
 } from '../db/equipment-units-db';
 import { selectAllLocations } from '../db/locations.db';
-import { EquipmentUnit, EquipmentUnitDTO } from '../models/equipmentUnit';
+import { EquipmentUnit, EquipmentUnitDTO } from '../types/equipmentUnit';
 
 export const getUnits = async (): Promise<EquipmentUnitDTO[]> => {
     const types = await selectAllTypes();
@@ -36,14 +36,14 @@ export const getUnits = async (): Promise<EquipmentUnitDTO[]> => {
     }
 };
 
-export const addUnit = async (unit: EquipmentUnit) => {
-    return insertUnit(unit);
+export const addUnit = async (unit: EquipmentUnit, changedBy:number) => {
+    return insertUnit(unit, changedBy);
 };
 
 export const deleteUnit = async (id: string) => {
     return delete_unit(id);
 };
 
-export const updateUnit = async (unit: EquipmentUnit) => {
-    return update_unit(unit);
+export const updateUnit = async (unit: EquipmentUnit, changedBy:number) => {
+    return update_unit(unit, changedBy);
 };

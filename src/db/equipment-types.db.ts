@@ -1,5 +1,5 @@
 import { pool } from './pool.db';
-import type { EquipmentType } from '../models/equipmentType';
+import type { EquipmentType } from '../types/equipmentType';
 import { logger } from '../utils/logger';
 import { RowDataPacket } from 'mysql2';
 
@@ -21,10 +21,11 @@ export const selectAllTypes = async (): Promise<
     }
 };
 
-export const insertType = async (name: string) => {
+export const insertType = async (name: string, changedBy: number) => {
     try {
-        await pool.execute('INSERT INTO equipment_types (name) VALUES (?)', [
+        await pool.execute('INSERT INTO equipment_types (name, changed_by) VALUES (?, ?)', [
             name,
+            changedBy
         ]);
     } catch (e) {
         logger.logError(`Failed to insert equipment type. ${e}`);
@@ -39,11 +40,12 @@ export const deleteType = async (id: string) => {
     }
 };
 
-export const updateType = async (type: EquipmentType) => {
+export const updateType = async (type: EquipmentType, changedBy: number) => {
     const { id, name } = type;
     try {
-        await pool.execute('UPDATE equipment_types SET name = ? WHERE id = ?', [
+        await pool.execute('UPDATE equipment_types SET name = ?, changed_by = ? WHERE id = ?', [
             name,
+            changedBy,
             id,
         ]);
     } catch (e) {

@@ -4,7 +4,7 @@ import {
     deleteLocation as delete_location,
     updateLocation as update_location,
 } from '../db/locations.db';
-import type { LocationDTO } from '../models/location';
+import type { LocationDTO } from '../types/location';
 import { getUnits } from './equipment-units.service';
 
 export const getLocations = async (): Promise<LocationDTO[]> => {
@@ -20,15 +20,15 @@ export const getLocations = async (): Promise<LocationDTO[]> => {
     }
 };
 
-export const addLocation = async (location: LocationDTO) => {
+export const addLocation = async (location: LocationDTO, changedBy: number) => {
     const { name } = location;
-    return insertLocation(name);
+    return insertLocation(name, changedBy);
 };
 
 export const deleteLocation = async (id: number) => {
     return delete_location(id);
 };
 
-export const updateLocation = async (location: LocationDTO) => {
-    return update_location(location);
+export const updateLocation = async (location: LocationDTO, changedBy: number) => {
+    return update_location(location, changedBy);
 };

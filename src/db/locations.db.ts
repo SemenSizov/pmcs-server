@@ -1,5 +1,5 @@
 import { pool } from './pool.db';
-import { Location } from '../models/location';
+import { Location } from '../types/location';
 import { logger } from '../utils/logger';
 import { RowDataPacket } from 'mysql2';
 
@@ -8,9 +8,9 @@ interface LocationRDP extends RowDataPacket {
     name: string;
 }
 
-export const insertLocation = async (name: string) => {
+export const insertLocation = async (name: string, changed_by: number) => {
     try {
-        return pool.execute('INSERT INTO locations (name) VALUES (?)', [name]);
+        return pool.execute('INSERT INTO locations (name, changed_by) VALUES (?, ?)', [name, changed_by]);
     } catch (e) {
         logger.logError(`Failed to store location ${e}`);
         throw e;
@@ -37,11 +37,12 @@ export const selectAllLocations = async () => {
     }
 };
 
-export const updateLocation = async (location: Location) => {
+export const updateLocation = async (location: Location, changed_by: number) => {
     const { id, name } = location;
     try {
-        await pool.execute('UPDATE locations SET name=(?) where id=(?)', [
+        await pool.execute('UPDATE locations SET name=(?), changed_by=(?) where id=(?)', [
             name,
+            changed_by,
             id,
         ]);
     } catch (e) {

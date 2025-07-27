@@ -25,7 +25,7 @@ export const addProcedure = async (
     next: NextFunction,
 ) => {
     try {
-        await add_procedure(req.body);
+        await add_procedure(req.body, req.user?.id!);
         res.status(201).send();
     } catch (error) {
         next(error);
@@ -38,7 +38,7 @@ export const updateProcedure = async (
     next: NextFunction,
 ) => {
     try {
-        await update_procedure(req.body);
+        await update_procedure(req.body, req.user?.id!);
         res.status(200).send();
     } catch (error) {
         next(error);
