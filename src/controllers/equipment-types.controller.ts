@@ -34,7 +34,7 @@ export const addType = async (
 };
 
 export const updateType = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction,
 ) => {

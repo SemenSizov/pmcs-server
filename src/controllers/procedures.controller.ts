@@ -5,6 +5,7 @@ import {
     deleteProcedure as delete_procedure,
     updateProcedure as update_procedure,
 } from '../services/procedures.service';
+import { AuthRequest } from '../middlewares/auth';
 
 export const getProcedures = async (
     req: Request,
@@ -20,7 +21,7 @@ export const getProcedures = async (
 };
 
 export const addProcedure = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction,
 ) => {
@@ -33,7 +34,7 @@ export const addProcedure = async (
 };
 
 export const updateProcedure = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction,
 ) => {
