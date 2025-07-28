@@ -6,6 +6,8 @@ import {
     MeterReading,
 } from '../types/meterReading';
 import { queryOrThrow } from '../utils/db';
+import { selectAllUnits } from './equipment-units-db';
+import { pool } from './pool.db';
 
 // 1. Вибірка з фільтрацією та пагінацією
 export const selectMeterReadings = async (filters: Filters = {}) => {
@@ -54,21 +56,32 @@ export const insertMeterReading = async (data: MeterReadingInsertData) => {
     VALUES (?, ?, ?, ?, ?)
   `;
 
-    const { date, unit_id, hours, user_id, changed_by } = data;
-    await queryOrThrow(query, [date, unit_id, hours, user_id, changed_by]);
+    const { date, unit_id, hours, changed_by } = data;
+    await queryOrThrow(query, [date, unit_id, hours, changed_by, changed_by]);
 };
 
 export const getFilteredMeterReadings = async (
     filters: Filters,
     offset: number,
     limit: number,
-): Promise<MeterReading[]> => {
+): Promise<{ items: MeterReading[]; total: number }> => {
     const conditions: string[] = [];
     const values: any[] = [];
 
     if (filters.unitId !== undefined) {
         conditions.push('unit_id = ?');
         values.push(filters.unitId);
+    }
+
+    if (filters.locationId !== undefined) {
+        const units = await selectAllUnits();
+        const filteredIds = units
+            ?.filter((u) => Number(u.location_id) === filters.locationId)
+            .map((u) => u.id);
+        console.log(filteredIds);
+        if (filteredIds?.length != undefined && filteredIds?.length > 0) {
+            conditions.push(`unit_id in (${filteredIds?.join(',')})`);
+        }
     }
 
     if (filters.fromDate) {
@@ -86,7 +99,22 @@ export const getFilteredMeterReadings = async (
     const whereClause =
         conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `SELECT * FROM meters_readings ${whereClause} ORDER BY date DESC LIMIT ${limitNum} OFFSET ${offsetNum}`;
-
+    console.log(query);
+    console.log(values);
     const rows = await queryOrThrow<MeterReadingDB[]>(query, values);
-    return rows.map(mapMeterReadingDBtoModel);
+    const totalQuery = `SELECT COUNT(*) as total FROM meters_readings ${whereClause}`;
+    const rTotal = (await queryOrThrow(totalQuery, values)) as unknown as {
+        total: number;
+    }[];
+    const total = rTotal[0].total;
+    const items = rows.map(mapMeterReadingDBtoModel);
+    return { items: items, total: total };
+};
+
+export const getLastReadingById = async (unitId: number) => {
+    const row = await queryOrThrow(
+        `SELECT hours, date FROM meters_readings WHERE unit_id = ? ORDER BY date DESC LIMIT 1`,
+        [unitId],
+    );
+    return row as unknown as { hours: number; date: string }[] | undefined;
 };

@@ -40,7 +40,7 @@ export const addUnit = async (unit: EquipmentUnit, changedBy:number) => {
     return insertUnit(unit, changedBy);
 };
 
-export const deleteUnit = async (id: string) => {
+export const deleteUnit = async (id: number) => {
     return delete_unit(id);
 };
 

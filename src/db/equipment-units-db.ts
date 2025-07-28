@@ -1,7 +1,6 @@
-import { pool } from './pool.db';
-import { logger } from '../utils/logger';
 import { RowDataPacket } from 'mysql2';
 import { EquipmentUnit } from '../types/equipmentUnit';
+import { queryOrThrow } from '../utils/db';
 
 interface EquipmentUnitRDP extends RowDataPacket {
     id: number;
@@ -10,44 +9,38 @@ interface EquipmentUnitRDP extends RowDataPacket {
     location_id: string;
 }
 
-export const selectAllUnits = async (): Promise<EquipmentUnitRDP[] | undefined> => {
-    try {
-        const [users] = await pool.execute<EquipmentUnitRDP[]>('SELECT * FROM equipment_units');
-        return users;
-    } catch (e) {
-        logger.logError(`Failed to select all equipment units. ${e}`);
-        throw (e)
-    }
+export const selectAllUnits = async (): Promise<
+    EquipmentUnitRDP[] | undefined
+> => {
+    const query = 'SELECT * FROM equipment_units';
+    const units = await queryOrThrow<EquipmentUnitRDP[]>(query);
+    return units;
 };
 
-export const insertUnit = async (equipnemtUnit: EquipmentUnit, changedBy: number) => {
+export const insertUnit = async (
+    equipnemtUnit: EquipmentUnit,
+    changedBy: number,
+) => {
     const { serial, locationId, equipmentTypeId } = equipnemtUnit;
-    try {
-        await pool.execute(
-            'INSERT INTO equipment_units (serial, equipment_type_id, location_id, changed_by) VALUES (?, ?, ?, ?)',
-            [serial, equipmentTypeId, locationId, changedBy],
-        );
-    } catch (e) {
-        logger.logError(`Failed to insert equipment unit. ${e}`);
-    }
+    const query =
+        'INSERT INTO equipment_units (serial, equipment_type_id, location_id, changed_by) VALUES (?, ?, ?, ?)';
+    await queryOrThrow(query, [serial, equipmentTypeId, locationId, changedBy]);
 };
 
-export const deleteUnit = async (id: string) => {
-    try {
-        await pool.execute('DELTE FROM equipment_units WHERE id = ?', [id]);
-    } catch (e) {
-        logger.logError(`Failed to delete equipment unit.  id = ${id}. ${e}`);
-    }
+export const deleteUnit = async (id: number) => {
+    const query = 'DELETE FROM equipment_units WHERE id = ?';
+    await queryOrThrow(query, [id]);
 };
 
 export const updateUnit = async (unit: EquipmentUnit, changedBy: number) => {
     const { id, serial, locationId, equipmentTypeId } = unit;
-    try {
-        await pool.execute<EquipmentUnitRDP[]>(
-            'UPDATE equipment_units SET serial = ?, location_id=?, equipment_type_id=?, changed_by=? WHERE id = ?',
-            [serial, locationId, equipmentTypeId, changedBy, id],
-        );
-    } catch (e) {
-        logger.logError(`Failed to update equipment unit. ${e}`);
-    }
+    const query =
+        'UPDATE equipment_units SET serial = ?, location_id=?, equipment_type_id=?, changed_by=? WHERE id = ?';
+    await queryOrThrow(query, [
+        serial,
+        locationId,
+        equipmentTypeId,
+        changedBy,
+        id,
+    ]);
 };

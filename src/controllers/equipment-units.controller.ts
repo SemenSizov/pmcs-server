@@ -52,7 +52,8 @@ export const deleteUnit = async (
     next: NextFunction,
 ) => {
     try {
-        await delete_unit(req.params.id);
+        const id = parseInt(req.params.id, 10);
+        await delete_unit(id);
         res.status(204).send();
     } catch (error) {
         next(error);

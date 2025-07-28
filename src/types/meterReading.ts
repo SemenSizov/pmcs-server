@@ -54,6 +54,7 @@ export const mapModelToMeterReadingInsert = (
 
 export type Filters = {
   unitId?: number;
+  locationId?: number;
   fromDate?: string;
   toDate?: string;
   limit?: number;
