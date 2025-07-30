@@ -6,14 +6,13 @@ import {
     getLastReadingById as getLastReadingByIdDb,
 } from '../db/meters-readings.db';
 import {
-    Filters,
+    MetersReadingFilters,
     mapModelToMeterReadingInsert,
-    Pagination,
     type MeterReading,
 } from '../types/meterReading';
 
 export const getMeterReadings = async (
-    filters: Filters = {},
+    filters: MetersReadingFilters = {},
     pagination = { page: 1, pageSize: 20 },
 ): Promise<{ items: MeterReading[]; total: number }> => {
     const { page, pageSize } = pagination;

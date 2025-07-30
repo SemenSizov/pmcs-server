@@ -52,16 +52,11 @@ export const mapModelToMeterReadingInsert = (
   changed_by: userId,
 });
 
-export type Filters = {
+export type MetersReadingFilters = {
   unitId?: number;
   locationId?: number;
   fromDate?: string;
   toDate?: string;
-  limit?: number;
-  offset?: number;
-};
-
-export type Pagination = {
   limit?: number;
   offset?: number;
 };

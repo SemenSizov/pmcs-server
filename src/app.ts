@@ -2,6 +2,7 @@ import express from 'express';
 import authRoutes from './routes/auth.routes';
 import adminRoutes from './routes/admin.routes';
 import meterReadingsRoutes from './routes/meters-readings.routes';
+import logEntriesRoutes from './routes/log-entries.routes';
 import { errorHandler } from './middlewares/errorHandler';
 import { verifyToken } from './middlewares/auth';
 import cors from 'cors';
@@ -22,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use(verifyToken);
 
 app.use('/api/meters-readings', meterReadingsRoutes);
+app.use('/api/log-entries', logEntriesRoutes);
 
 app.use('/api/admin', adminRoutes);
 // Global error handler (should be after routes)

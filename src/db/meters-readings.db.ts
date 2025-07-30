@@ -2,15 +2,14 @@ import {
     MeterReadingDB,
     mapMeterReadingDBtoModel,
     MeterReadingInsertData,
-    Filters,
+    MetersReadingFilters,
     MeterReading,
 } from '../types/meterReading';
 import { queryOrThrow } from '../utils/db';
 import { selectAllUnits } from './equipment-units-db';
-import { pool } from './pool.db';
 
 // 1. Вибірка з фільтрацією та пагінацією
-export const selectMeterReadings = async (filters: Filters = {}) => {
+export const selectMeterReadings = async (filters: MetersReadingFilters = {}) => {
     const { unitId, fromDate, toDate, limit = 20, offset = 0 } = filters;
 
     const conditions: string[] = [];
@@ -61,7 +60,7 @@ export const insertMeterReading = async (data: MeterReadingInsertData) => {
 };
 
 export const getFilteredMeterReadings = async (
-    filters: Filters,
+    filters: MetersReadingFilters,
     offset: number,
     limit: number,
 ): Promise<{ items: MeterReading[]; total: number }> => {
@@ -78,7 +77,6 @@ export const getFilteredMeterReadings = async (
         const filteredIds = units
             ?.filter((u) => Number(u.location_id) === filters.locationId)
             .map((u) => u.id);
-        console.log(filteredIds);
         if (filteredIds?.length != undefined && filteredIds?.length > 0) {
             conditions.push(`unit_id in (${filteredIds?.join(',')})`);
         }
@@ -99,8 +97,6 @@ export const getFilteredMeterReadings = async (
     const whereClause =
         conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `SELECT * FROM meters_readings ${whereClause} ORDER BY date DESC LIMIT ${limitNum} OFFSET ${offsetNum}`;
-    console.log(query);
-    console.log(values);
     const rows = await queryOrThrow<MeterReadingDB[]>(query, values);
     const totalQuery = `SELECT COUNT(*) as total FROM meters_readings ${whereClause}`;
     const rTotal = (await queryOrThrow(totalQuery, values)) as unknown as {
