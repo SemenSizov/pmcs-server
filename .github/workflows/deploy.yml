@@ -1,0 +1,33 @@
+name: Deploy TypeScript backend to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd ~/pmcs-server
+          git pull origin main
+          
+          # Встановлення залежностей
+          npm ci
+          
+          # Компіляція TypeScript
+          npm run build
+          
+          # Перезапуск сервера через PM2
+          pm2 restart ecosystem.config.js || pm2 start ecosystem.config.js
