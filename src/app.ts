@@ -3,6 +3,7 @@ import authRoutes from './routes/auth.routes';
 import adminRoutes from './routes/admin.routes';
 import meterReadingsRoutes from './routes/meters-readings.routes';
 import logEntriesRoutes from './routes/log-entries.routes';
+import statusRoutes from './routes/status.routes'
 import { errorHandler } from './middlewares/errorHandler';
 import { verifyToken } from './middlewares/auth';
 import cors from 'cors';
@@ -19,6 +20,7 @@ app.use(
 app.use(express.json());
 
 // Routes
+app.use('/api/status', statusRoutes)
 app.use('/api/auth', authRoutes);
 app.use(verifyToken);
 
