@@ -2,7 +2,6 @@ import axios from 'axios';
 import { OAuth2Client } from 'google-auth-library';
 import { getJWT } from '../utils/jwt';
 import { getUserByEmail } from './users.service';
-import { logger } from '../utils/logger';
 
 export const getAuthResponse = async (
     code: any,
@@ -15,7 +14,6 @@ export const getAuthResponse = async (
     params.append('client_secret', process.env.GOOGLE_CLIENT_SECRET!);
     params.append('redirect_uri', process.env.GOOGLE_REDIRECT_URI!);
     params.append('grant_type', 'authorization_code');
-    logger.logInfo(JSON.stringify(params))
     const tokenRes = await axios.post(
         'https://oauth2.googleapis.com/token',
         params.toString(),
@@ -27,14 +25,12 @@ export const getAuthResponse = async (
     );
 
     const idToken = tokenRes.data.id_token;
-    logger.logInfo(idToken)
     const ticket = await client.verifyIdToken({
         idToken,
         audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
-    logger.logInfo(JSON.stringify(payload))
     const { email } = payload!;
     if (!email) {
         return { responseBody: { error: 'User not found' }, status: 401 };

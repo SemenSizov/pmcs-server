@@ -95,7 +95,6 @@ export class Logging {
       format: format.combine(
         format.timestamp(),
         format(info => {
-        //   console.log(info);
           info.app = this._appName;
           return info;
         })(),

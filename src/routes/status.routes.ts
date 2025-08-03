@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { readFileSync } from 'node:fs';
+import { logger } from '../utils/logger';
 
 const router = Router();
 
@@ -29,7 +30,7 @@ const getLogs = async (req: Request, res: Response) => {
                 }
             }
         } catch (statErr) {
-            console.error(`Error getting stats for ${file}:`, statErr);
+            logger.logError(`Error getting stats for ${file}: ${statErr}`);
         }
     }
     const data = readFileSync(path.join(LOG_DIR, latestFile), 'utf8');
