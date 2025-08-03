@@ -3,11 +3,12 @@ import authRoutes from './routes/auth.routes';
 import adminRoutes from './routes/admin.routes';
 import meterReadingsRoutes from './routes/meters-readings.routes';
 import logEntriesRoutes from './routes/log-entries.routes';
-import statusRoutes from './routes/status.routes'
+import statusRoutes from './routes/status.routes';
 import { errorHandler } from './middlewares/errorHandler';
 import { verifyToken } from './middlewares/auth';
 import cors from 'cors';
 import config from './config/config';
+import { logger } from './utils/logger';
 
 const app = express();
 
@@ -19,8 +20,14 @@ app.use(
 );
 app.use(express.json());
 
+app.use((req, res, next) => {
+    console.error(req.method, req.url, req.body);
+    logger.logInfo(req.url);
+
+    next();
+});
 // Routes
-app.use('/api/status', statusRoutes)
+app.use('/api/status', statusRoutes);
 app.use('/api/auth', authRoutes);
 app.use(verifyToken);
 
