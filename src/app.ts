@@ -20,21 +20,14 @@ app.use(
 );
 app.use(express.json());
 
-app.use((req, res, next) => {
-    console.error(req.method, req.url, req.body);
-    logger.logInfo(req.url);
-
-    next();
-});
 // Routes
 app.use('/api/status', statusRoutes);
 app.use('/api/auth', authRoutes);
-app.use(verifyToken);
 
-app.use('/api/meters-readings', meterReadingsRoutes);
-app.use('/api/log-entries', logEntriesRoutes);
+app.use('/api/meters-readings', verifyToken, meterReadingsRoutes);
+app.use('/api/log-entries', verifyToken, logEntriesRoutes);
 
-app.use('/api/admin', adminRoutes);
+app.use('/api/admin',verifyToken, adminRoutes);
 // Global error handler (should be after routes)
 app.use(errorHandler);
 
