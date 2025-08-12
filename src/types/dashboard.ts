@@ -21,6 +21,7 @@ export interface DashboardEntryWithStatus extends DashboardEntry {
 export type UnitGroup = {
   serial: string;
   equipment_type: string;
+  hours: number;
   entries: DashboardEntryWithStatus[];
 };
 

@@ -145,7 +145,7 @@ function groupByLocationAndUnit(rows: DashboardEntryWithStatus[]): LocationGroup
     // 2) Група юніта всередині локації
     let unit = loc.unitMap.get(item.unit_serial);
     if (!unit) {
-      unit = { serial: item.unit_serial, equipment_type: item.equipment_type, entries: [] };
+      unit = { serial: item.unit_serial, equipment_type: item.equipment_type, hours: item.last_meter_hours, entries: [] };
       loc.unitMap.set(item.unit_serial, unit);
     } else if (unit.equipment_type !== item.equipment_type) {
       // якщо тип обладнання відрізняється між записами — залишаємо перший
