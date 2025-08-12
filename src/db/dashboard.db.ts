@@ -8,7 +8,7 @@ export const selectDashboardData = async () => {
         eu.serial             AS unit_serial,
         et.name               AS equipment_type,
         p.name                AS procedure_name,
-        p.'type'              AS procedure_type,
+        p.type              AS procedure_type,
         p.hours               AS procedure_hours,
         p.period              AS procedure_period,
         le.date               AS last_log_date,
