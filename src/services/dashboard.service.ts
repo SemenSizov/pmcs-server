@@ -40,11 +40,11 @@ const getStatusForHours = (
     const delta =
         entry.last_log_hours + entry.procedure_hours - entry.last_meter_hours;
 
-    if (delta < 45) {
-        return 'warning';
-    }
     if (delta < 25) {
         return 'error';
+    }
+    if (delta < 45) {
+        return 'warning';
     }
     return 'ok';
 };
