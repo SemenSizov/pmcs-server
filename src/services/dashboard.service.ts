@@ -43,7 +43,7 @@ const getStatusForHours = (
     if (delta < 45) {
         return 'warning';
     }
-    if (delta > 25) {
+    if (delta < 25) {
         return 'error';
     }
     return 'ok';
