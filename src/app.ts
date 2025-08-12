@@ -3,6 +3,7 @@ import authRoutes from './routes/auth.routes';
 import adminRoutes from './routes/admin.routes';
 import meterReadingsRoutes from './routes/meters-readings.routes';
 import logEntriesRoutes from './routes/log-entries.routes';
+import dashboardRoutes from './routes/dashboard.routes';
 import statusRoutes from './routes/status.routes';
 import { errorHandler } from './middlewares/errorHandler';
 import { verifyToken } from './middlewares/auth';
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoutes);
 
 app.use('/api/meters-readings', verifyToken, meterReadingsRoutes);
 app.use('/api/log-entries', verifyToken, logEntriesRoutes);
+app.use('/api/dashboard', verifyToken, dashboardRoutes);
 
 app.use('/api/admin',verifyToken, adminRoutes);
 // Global error handler (should be after routes)
