@@ -6,6 +6,7 @@ export interface EquipmentUnit {
   equipmentTypeId: number;
   locationId: number;
   serial: string;
+  hasHourmeter: boolean;
 }
 
 export interface EquipmentUnitDTO {
@@ -13,4 +14,5 @@ export interface EquipmentUnitDTO {
   equipmentType: EquipmentType;
   location: Location;
   serial: string;
+  hasHourmeter: boolean;
 }

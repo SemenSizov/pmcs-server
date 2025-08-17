@@ -21,10 +21,16 @@ export const insertUnit = async (
     equipnemtUnit: EquipmentUnit,
     changedBy: number,
 ) => {
-    const { serial, locationId, equipmentTypeId } = equipnemtUnit;
+    const { serial, locationId, equipmentTypeId, hasHourmeter } = equipnemtUnit;
     const query =
-        'INSERT INTO equipment_units (serial, equipment_type_id, location_id, changed_by) VALUES (?, ?, ?, ?)';
-    await queryOrThrow(query, [serial, equipmentTypeId, locationId, changedBy]);
+        'INSERT INTO equipment_units (serial, equipment_type_id, location_id, changed_by, has_hourmeters) VALUES (?, ?, ?, ?, ?)';
+    await queryOrThrow(query, [
+        serial,
+        equipmentTypeId,
+        locationId,
+        changedBy,
+        hasHourmeter ? 1 : 0,
+    ]);
 };
 
 export const deleteUnit = async (id: number) => {
@@ -33,14 +39,15 @@ export const deleteUnit = async (id: number) => {
 };
 
 export const updateUnit = async (unit: EquipmentUnit, changedBy: number) => {
-    const { id, serial, locationId, equipmentTypeId } = unit;
+    const { id, serial, locationId, equipmentTypeId, hasHourmeter } = unit;
     const query =
-        'UPDATE equipment_units SET serial = ?, location_id=?, equipment_type_id=?, changed_by=? WHERE id = ?';
+        'UPDATE equipment_units SET serial = ?, location_id=?, equipment_type_id=?, changed_by=?, has_hourmeter=? WHERE id = ?';
     await queryOrThrow(query, [
         serial,
         locationId,
         equipmentTypeId,
         changedBy,
+        hasHourmeter ? 1 : 0,
         id,
     ]);
 };
