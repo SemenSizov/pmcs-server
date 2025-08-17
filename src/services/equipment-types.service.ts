@@ -6,13 +6,19 @@ export const getTypes =async (): Promise<EquipmentType[]> => {
     if (!types){
         return []
     } else {
-        return types
+        return types.map((t) => {
+            return {
+                id: t.id,
+                name: t.name,
+                hasHourmeter: !!t.has_hourmeter
+            }
+        })
     }
 }
 
 export const addType = async(type: EquipmentType, changedBy:number) =>{
-    const {name} = type;
-    return insertType(name, changedBy)
+    const {name, hasHourmeter} = type;
+    return insertType(name, changedBy, hasHourmeter)
 }
 
 export const deleteType = async (id: string)=>{

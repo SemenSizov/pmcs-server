@@ -28,8 +28,8 @@ export const getUnits = async (): Promise<EquipmentUnitDTO[]> => {
                 equipmentType: {
                     id: type.id,
                     name: type.name,
+                    hasHourmeter: !!type.has_hourmeter,
                 },
-                hasHourmeter: !!u.has_hourmeter,
             };
             return unitDTO;
         });

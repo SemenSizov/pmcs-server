@@ -1,4 +1,5 @@
 export interface EquipmentType {
     id: number;
-    name: string
+    name: string;
+    hasHourmeter: boolean;
 }

@@ -5,6 +5,7 @@ import { queryOrThrow } from '../utils/db';
 interface EquipmentTypeRDP extends RowDataPacket {
     id: number;
     name: string;
+    has_hourmeter: boolean;
 }
 
 export const selectAllTypes = async (): Promise<
@@ -15,10 +16,10 @@ export const selectAllTypes = async (): Promise<
     return types;
 };
 
-export const insertType = async (name: string, changedBy: number) => {
+export const insertType = async (name: string, changedBy: number, hasHourmeter: boolean) => {
     const query =
-        'INSERT INTO equipment_types (name, changed_by) VALUES (?, ?)';
-    await queryOrThrow(query, [name, changedBy]);
+        'INSERT INTO equipment_types (name, changed_by, has_hourmeter) VALUES (?, ?, ?)';
+    await queryOrThrow(query, [name, changedBy, hasHourmeter ? 1 : 0]);
 };
 
 export const deleteType = async (id: string) => {
@@ -27,8 +28,8 @@ export const deleteType = async (id: string) => {
 };
 
 export const updateType = async (type: EquipmentType, changedBy: number) => {
-    const { id, name } = type;
+    const { id, name, hasHourmeter } = type;
     const query =
-        'UPDATE equipment_types SET name = ?, changed_by = ? WHERE id = ?';
-    await queryOrThrow(query, [name, changedBy, id]);
+        'UPDATE equipment_types SET name = ?, changed_by = ?, has_hourmeter = ? WHERE id = ?';
+    await queryOrThrow(query, [name, changedBy, hasHourmeter ? 1 : 0, id]);
 };
