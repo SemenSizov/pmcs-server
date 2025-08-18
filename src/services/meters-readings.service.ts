@@ -4,6 +4,7 @@ import {
     getFilteredMeterReadings,
     insertMeterReading,
     getLastReadingById as getLastReadingByIdDb,
+    deleteReadingById,
 } from '../db/meters-readings.db';
 import {
     MetersReadingFilters,
@@ -33,3 +34,7 @@ export const getLastMeterReadingById = async (unitId: number) => {
     const lastReading = await getLastReadingByIdDb(unitId);
     return lastReading ? lastReading[0] : { hours: 0, date: null };
 };
+
+export const deleteMeterReadingById = async (id: number) => {
+    return deleteReadingById(id)
+}

@@ -114,3 +114,7 @@ export const getLastReadingById = async (unitId: number) => {
     );
     return row as unknown as { hours: number; date: string }[] | undefined;
 };
+
+export const deleteReadingById = async (id: number) => {
+    await queryOrThrow(`DELETE FROM meters_readings WHERE id = ?`, [id])
+}

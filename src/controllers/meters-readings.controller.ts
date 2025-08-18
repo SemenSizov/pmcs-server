@@ -3,6 +3,7 @@ import {
     getMeterReadings,
     addMeterReading,
     getLastMeterReadingById,
+    deleteMeterReadingById,
 } from '../services/meters-readings.service';
 import { AuthRequest } from '../middlewares/auth';
 import { MeterReading } from '../types/meterReading';
@@ -73,3 +74,17 @@ export const getLastReading = async (
     const reading = await getLastMeterReadingById(unit_id)
     res.json(reading)
 };
+
+export const deleteReading = async (
+    req: AuthRequest,
+    res: Response, 
+    next: NextFunction,   
+) => {
+    const id = parseInt(req.params.id);
+    const role = req.user?.role;
+    if (role !== 'admin') {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+    await deleteMeterReadingById(id);
+    res.status(204).send();
+}
