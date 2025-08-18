@@ -80,11 +80,11 @@ export const deleteReading = async (
     res: Response, 
     next: NextFunction,   
 ) => {
+    try {
     const id = parseInt(req.params.id);
-    const role = req.user?.role;
-    if (role !== 'admin') {
-        return res.status(403).json({ error: 'Forbidden' });
-    }
     await deleteMeterReadingById(id);
     res.status(204).send();
+    } catch (error) {
+        next(error);
+    }   
 }

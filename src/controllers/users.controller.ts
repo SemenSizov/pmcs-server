@@ -7,6 +7,7 @@ import {
   activateUser as activate_user,
   deactivateUser as deactivate_user,
 } from '../services/users.service';
+import { AuthRequest } from '../middlewares/auth';
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -66,6 +67,18 @@ export const deactivateUser = async (req: Request, res: Response, next: NextFunc
 
     await deactivate_user(id);
     res.status(200).json({ message: 'User deactivated' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCurrentUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }

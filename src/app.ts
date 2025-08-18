@@ -10,6 +10,7 @@ import { verifyToken } from './middlewares/auth';
 import cors from 'cors';
 import config from './config/config';
 import { logger } from './utils/logger';
+import { getCurrentUser } from './controllers/users.controller';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/meters-readings', verifyToken, meterReadingsRoutes);
 app.use('/api/log-entries', verifyToken, logEntriesRoutes);
 app.use('/api/dashboard', verifyToken, dashboardRoutes);
+app.use('/api/current-user', verifyToken, getCurrentUser);
 
 app.use('/api/admin',verifyToken, adminRoutes);
 // Global error handler (should be after routes)
