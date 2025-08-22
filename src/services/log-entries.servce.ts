@@ -1,4 +1,4 @@
-import { getLastLogEnrty, insertLogEntry, selectFilteredLogEntries } from '../db/log-entries.db';
+import { deleteLogEntry, getLastLogEnrty, insertLogEntry, selectFilteredLogEntries } from '../db/log-entries.db';
 import { LogEntry, LogEntryDTO, LogEntryFilters, LogEntryInsertData } from '../types/logEntry';
 import { getUnits } from './equipment-units.service';
 import { getProcedures } from './procedures.service';
@@ -36,3 +36,7 @@ export const addLogEntry = async (logEntry: LogEntry, userId: number) =>{
     }
     await insertLogEntry(data)
 }
+
+export const deleteEntry = async (id: number) => {
+    await deleteLogEntry(id);
+};

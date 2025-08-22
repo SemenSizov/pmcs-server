@@ -3,6 +3,7 @@ import { AuthRequest } from '../middlewares/auth';
 import { LogEntry, LogEntryFilters } from '../types/logEntry';
 import {
     addLogEntry,
+    deleteEntry,
     getFilteredLogEntries,
     getLastLogEntry,
 } from '../services/log-entries.servce';
@@ -72,3 +73,17 @@ export const getLastLog = async (
         next(e);
     }
 };
+
+export const deleteLogEntry = async (
+    req: AuthRequest,
+    res: Response, 
+    next: NextFunction,   
+) => {
+    try {
+    const id = parseInt(req.params.id);
+    await deleteEntry(id);
+    res.status(204).send();
+    } catch (error) {
+        next(error);
+    }   
+}

@@ -69,3 +69,8 @@ export const getLastLogEnrty = async (unitId: number, procedureId: number) => {
     );
     return row as unknown as { hours: number; date: string }[] | undefined;
 };
+
+export const deleteLogEntry = async (id: number) => {
+    const query = `DELETE FROM log_entries WHERE id = ?`;
+    await queryOrThrow(query, [id]);
+};
