@@ -110,6 +110,7 @@ function diffDaysFromToday(ymd: string) {
 }
 
 function parseYMDtoUTC(ymd: string) {
+    console.log(`Actual last_log_date value: ${ymd}`)
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ymd);
     if (!m) return null;
     const y = +m[1],
@@ -129,41 +130,41 @@ function parseYMDtoUTC(ymd: string) {
 
 
 function groupByLocationAndUnit(rows: DashboardEntryWithStatus[]): LocationGroup[] {
-  const locMap = new Map<number, { name: string; unitMap: Map<string, UnitGroup> }>();
+    const locMap = new Map<number, { name: string; unitMap: Map<string, UnitGroup> }>();
 
-  for (const item of rows) {
-    // 1) Група локації
-    let loc = locMap.get(item.location_id);
-    if (!loc) {
-      loc = { name: item.location_name, unitMap: new Map() };
-      locMap.set(item.location_id, loc);
-    } else if (loc.name !== item.location_name) {
-      // за бажанням: перевірка на узгодженість даних
-      // console.warn(`Location name mismatch for id=${item.location_id}: '${loc.name}' vs '${item.location_name}'`);
+    for (const item of rows) {
+        // 1) Група локації
+        let loc = locMap.get(item.location_id);
+        if (!loc) {
+            loc = { name: item.location_name, unitMap: new Map() };
+            locMap.set(item.location_id, loc);
+        } else if (loc.name !== item.location_name) {
+            // за бажанням: перевірка на узгодженість даних
+            // console.warn(`Location name mismatch for id=${item.location_id}: '${loc.name}' vs '${item.location_name}'`);
+        }
+
+        // 2) Група юніта всередині локації
+        let unit = loc.unitMap.get(item.unit_serial);
+        if (!unit) {
+            unit = { serial: item.unit_serial, equipment_type: item.equipment_type, hours: item.last_meter_hours, entries: [] };
+            loc.unitMap.set(item.unit_serial, unit);
+        } else if (unit.equipment_type !== item.equipment_type) {
+            // якщо тип обладнання відрізняється між записами — залишаємо перший
+            // можна обрати іншу політику (наприклад, замінювати, якщо зустрівся новий)
+            // unit.equipment_type = item.equipment_type;
+        }
+
+        unit.entries.push(item);
     }
 
-    // 2) Група юніта всередині локації
-    let unit = loc.unitMap.get(item.unit_serial);
-    if (!unit) {
-      unit = { serial: item.unit_serial, equipment_type: item.equipment_type, hours: item.last_meter_hours, entries: [] };
-      loc.unitMap.set(item.unit_serial, unit);
-    } else if (unit.equipment_type !== item.equipment_type) {
-      // якщо тип обладнання відрізняється між записами — залишаємо перший
-      // можна обрати іншу політику (наприклад, замінювати, якщо зустрівся новий)
-      // unit.equipment_type = item.equipment_type;
+    // 3) Перетворення Map -> масивів з збереженням порядку появи
+    const result: LocationGroup[] = [];
+    for (const [id, { name, unitMap }] of locMap) {
+        result.push({
+            id,
+            name,
+            units: Array.from(unitMap.values()),
+        });
     }
-
-    unit.entries.push(item);
-  }
-
-  // 3) Перетворення Map -> масивів з збереженням порядку появи
-  const result: LocationGroup[] = [];
-  for (const [id, { name, unitMap }] of locMap) {
-    result.push({
-      id,
-      name,
-      units: Array.from(unitMap.values()),
-    });
-  }
-  return result;
+    return result;
 }
