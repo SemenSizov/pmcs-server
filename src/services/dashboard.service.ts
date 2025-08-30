@@ -99,12 +99,12 @@ const getStatusForPeriod = (
 };
 
 function diffDaysFromToday(ymd: string) {
-    const d = parseYMDtoUTC(ymd);
-    if (!d) throw new Error('Invalid date format. Expected YYYY-MM-DD');
+    // const d = parseYMDtoUTC(ymd);
+    // if (!d) throw new Error('Invalid date format. Expected YYYY-MM-DD');
 
     const now = new Date();
     const todayUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-    const inputUTC = d.getTime();
+    const inputUTC = (ymd as unknown as Date).getTime();
 
     const MS_PER_DAY = 24 * 60 * 60 * 1000;
     return Math.round((inputUTC - todayUTC) / MS_PER_DAY);
