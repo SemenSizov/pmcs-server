@@ -1,5 +1,6 @@
 import { selectDashboardData } from '../db/dashboard.db';
 import { DashboardEntry, DashboardEntryWithStatus, LocationGroup, UnitGroup } from '../types/dashboard';
+import { logger } from '../utils/logger';
 
 const getDashboardRawData = async () => {
     const data = await selectDashboardData();
@@ -110,7 +111,7 @@ function diffDaysFromToday(ymd: string) {
 }
 
 function parseYMDtoUTC(ymd: string) {
-    console.log(`Actual last_log_date value: ${ymd}`)
+    logger.logInfo(`Actual last_log_date value: ${ymd}`)
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ymd);
     if (!m) return null;
     const y = +m[1],
