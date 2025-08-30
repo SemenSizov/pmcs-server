@@ -56,58 +56,55 @@ const getStatusForPeriod = (
     const lastLogDate = entry.last_log_date;
     switch (entry.procedure_period) {
         case 'weekly':
-            if (diffDaysFromToday(lastLogDate) < 2) {
+            if (diffDaysFromToday(lastLogDate) + 7 < 2) {
                 return 'error';
             }
-            if (diffDaysFromToday(lastLogDate) < 3) {
+            if (diffDaysFromToday(lastLogDate) + 7 < 3) {
                 return 'warning';
             }
             return 'ok';
         case 'monthly':
-            if (diffDaysFromToday(lastLogDate) < 3) {
+            if (diffDaysFromToday(lastLogDate) + 30 < 3) {
                 return 'error';
             }
-            if (diffDaysFromToday(lastLogDate) < 7) {
+            if (diffDaysFromToday(lastLogDate) + 30 < 7) {
                 return 'warning';
             }
             return 'ok';
         case 'quarterly':
-            if (diffDaysFromToday(lastLogDate) < 10) {
+            if (diffDaysFromToday(lastLogDate) + 90 < 10) {
                 return 'error';
             }
-            if (diffDaysFromToday(lastLogDate) < 15) {
+            if (diffDaysFromToday(lastLogDate) + 90 < 15) {
                 return 'warning';
             }
             return 'ok';
         case 'semiannual':
-            if (diffDaysFromToday(lastLogDate) < 15) {
+            if (diffDaysFromToday(lastLogDate) + 180 < 15) {
                 return 'error';
             }
-            if (diffDaysFromToday(lastLogDate) < 25) {
+            if (diffDaysFromToday(lastLogDate) + 180 < 25) {
                 return 'warning';
             }
             return 'ok';
         case 'annual':
-            if (diffDaysFromToday(lastLogDate) < 15) {
+            if (diffDaysFromToday(lastLogDate) + 360 < 15) {
                 return 'error';
             }
-            if (diffDaysFromToday(lastLogDate) < 25) {
+            if (diffDaysFromToday(lastLogDate) + 360 < 25) {
                 return 'warning';
             }
             return 'ok';
     }
 };
 
-function diffDaysFromToday(ymd: string) {
-    // const d = parseYMDtoUTC(ymd);
-    // if (!d) throw new Error('Invalid date format. Expected YYYY-MM-DD');
-
+function diffDaysFromToday(date: Date) {
     const now = new Date();
     const todayUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-    const inputUTC = (ymd as unknown as Date).getTime();
+    const inputUTC = date.getTime();
 
     const MS_PER_DAY = 24 * 60 * 60 * 1000;
-    return Math.round((inputUTC - todayUTC) / MS_PER_DAY);
+    return Math.round((todayUTC - inputUTC) / MS_PER_DAY);
 }
 
 function parseYMDtoUTC(ymd: string) {
