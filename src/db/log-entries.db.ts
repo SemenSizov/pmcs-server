@@ -42,7 +42,7 @@ export const selectFilteredLogEntries = async (filters: LogEntryFilters) => {
         }
     }
 
-    const query = `SELECT * FROM log_entries ${where} ORDER BY date DESC LIMIT ${limit} OFFSET ${offset}`;
+    const query = `SELECT * FROM log_entries ${where} ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`;
     const rows = await queryOrThrow<LogEntryDB[]>(query, params);
     const totalQuery = `SELECT COUNT(*) as total FROM log_entries ${where}`;
     const rTotal = (await queryOrThrow(totalQuery, params)) as unknown as {

@@ -36,7 +36,7 @@ export const selectMeterReadings = async (filters: MetersReadingFilters = {}) =>
     const query = `
     SELECT * FROM meters_readings
     ${whereClause}
-    ORDER BY date DESC
+    ORDER BY id DESC
     LIMIT ?
     OFFSET ?
   `;
