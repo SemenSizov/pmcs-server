@@ -96,7 +96,7 @@ export const getFilteredMeterReadings = async (
     const offsetNum = Number(offset);
     const whereClause =
         conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-    const query = `SELECT * FROM meters_readings ${whereClause} ORDER BY date DESC LIMIT ${limitNum} OFFSET ${offsetNum}`;
+    const query = `SELECT * FROM meters_readings ${whereClause} ORDER BY id DESC LIMIT ${limitNum} OFFSET ${offsetNum}`;
     const rows = await queryOrThrow<MeterReadingDB[]>(query, values);
     const totalQuery = `SELECT COUNT(*) as total FROM meters_readings ${whereClause}`;
     const rTotal = (await queryOrThrow(totalQuery, values)) as unknown as {
