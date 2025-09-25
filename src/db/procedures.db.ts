@@ -38,7 +38,7 @@ export const insertProcedure = async (
 };
 
 export const deleteProcedure = async (id: string) => {
-    const query = 'DELETE from PROCEDURES where id = ?';
+    const query = 'DELETE from procedures where id = ?';
     await queryOrThrow(query, [id]);
 };
 
