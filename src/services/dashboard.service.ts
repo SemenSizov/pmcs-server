@@ -53,6 +53,7 @@ const getStatusForHours = (
 const getStatusForPeriod = (
     entry: DashboardEntry,
 ): 'ok' | 'warning' | 'error' | undefined => {
+    console.log(entry)
     const lastLogDate = entry.last_log_date;
     switch (entry.procedure_period) {
         case 'weekly':
