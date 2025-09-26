@@ -55,6 +55,7 @@ const getStatusForPeriod = (
 ): 'ok' | 'warning' | 'error' | undefined => {
     logger.logInfo(JSON.stringify(entry))
     const lastLogDate = entry.last_log_date;
+    logger.logInfo(typeof entry.last_log_date)
     switch (entry.procedure_period) {
         case 'weekly':
             if (diffDaysFromToday(lastLogDate) + 7 < 2) {
