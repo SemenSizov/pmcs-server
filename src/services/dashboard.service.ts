@@ -107,7 +107,7 @@ function diffDaysFromToday(date: Date) {
     const inputUTC = date.getTime();
 
     const MS_PER_DAY = 24 * 60 * 60 * 1000;
-    return Math.round((todayUTC - inputUTC) / MS_PER_DAY);
+    return Math.round((inputUTC - todayUTC) / MS_PER_DAY);
 }
 
 function parseYMDtoUTC(ymd: string) {
